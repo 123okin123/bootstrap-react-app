@@ -21,6 +21,7 @@ import {
   Box,
   Link,
 } from '@material-ui/core';
+import { useHistory } from 'react-router-dom';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -62,6 +63,7 @@ interface FormValues {
 export default function LoginPage(): ReactElement {
   const classes = useStyles();
   const [message, setMessage] = useState(null);
+  const history = useHistory();
 
 
   const onSubmit = async (
@@ -69,7 +71,7 @@ export default function LoginPage(): ReactElement {
     { setSubmitting }: FormikHelpers<FormValues>,
   ): Promise<void> => {
 
-
+    history.push('/');
     setSubmitting(false);
   };
 
