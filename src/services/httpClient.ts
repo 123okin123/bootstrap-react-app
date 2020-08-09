@@ -1,8 +1,8 @@
 import axios, { AxiosRequestConfig } from 'axios';
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL;
+const API_URL = process.env.REACT_APP_API_URL;
 
-const isLogEnabled = process.env.NODE_ENV !== 'production' && process.env.NEXT_PUBLIC_LOGGING;
+const isLogEnabled = process.env.NODE_ENV !== 'production' && process.env.REACT_APP_LOGGING;
 
 export const httpClient = axios.create({
   baseURL: API_URL,
@@ -16,8 +16,16 @@ export const httpClient = axios.create({
 
 // Add a request interceptor
 httpClient.interceptors.request.use(
-  (config) => {
-    // Do something before request is sent
+  (config: AxiosRequestConfig) => {
+    const token = localStorage.getItem('token');
+
+    if (token) {
+      config.headers = {
+        ...config.headers,
+        Authorization: `Bearer ${token}`,
+      };
+    }
+
     if (isLogEnabled)
       console.log('Network Request:', `${config.baseURL}${config.url}`, config.method);
     return config;

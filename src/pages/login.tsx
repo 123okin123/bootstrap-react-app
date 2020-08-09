@@ -6,7 +6,6 @@ import React, { ReactElement, useState } from 'react';
 
 import * as Yup from 'yup';
 
-
 import {
   makeStyles,
   Grid,
@@ -22,6 +21,7 @@ import {
   Link,
 } from '@material-ui/core';
 import { useHistory } from 'react-router-dom';
+import { ApiContainer } from '../hooks/useApi';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -64,14 +64,18 @@ export default function LoginPage(): ReactElement {
   const classes = useStyles();
   const [message, setMessage] = useState(null);
   const history = useHistory();
-
+  const { authService } = ApiContainer.useContainer();
 
   const onSubmit = async (
     values: FormValues,
     { setSubmitting }: FormikHelpers<FormValues>,
   ): Promise<void> => {
-
-    history.push('/');
+    try {
+      await authService.login(values.email, values.password);
+      history.push('/');
+    } catch (e) {
+      setMessage(e.response?.data?.message);
+    }
     setSubmitting(false);
   };
 

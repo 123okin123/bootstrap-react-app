@@ -1,27 +1,23 @@
-import { Route, Redirect, RouteProps } from "react-router-dom";
-import React from 'react';
+import { Route, Redirect, RouteProps } from 'react-router-dom';
+import React, { ReactElement } from 'react';
 
-
-const fakeAuth = {
-    isAuthenticated: false
+export default function PrivateRoute({ children, ...rest }: RouteProps): ReactElement {
+  const token = localStorage.getItem('token');
+  return (
+    <Route
+      {...rest}
+      render={({ location }) =>
+        token ? (
+          children
+        ) : (
+          <Redirect
+            to={{
+              pathname: '/login',
+              state: { from: location },
+            }}
+          />
+        )
+      }
+    />
+  );
 }
-
-export default function PrivateRoute({ children, ...rest }: RouteProps) {
-    return (
-      <Route
-        {...rest}
-        render={({ location }) =>
-          fakeAuth.isAuthenticated ? (
-            children
-          ) : (
-            <Redirect
-              to={{
-                pathname: '/login',
-                state: { from: location }
-              }}
-            />
-          )
-        }
-      />
-    );
-  }

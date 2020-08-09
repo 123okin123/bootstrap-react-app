@@ -1,9 +1,12 @@
-import React from 'react';
+import React, { ReactElement } from 'react';
 import './app.css';
 import Router from './router';
+import { ApiContainer } from './hooks/useApi';
 
-export default function App() {
+export default function App(): ReactElement {
   return (
-      <Router/>
+    <ApiContainer.Provider>
+      <Router />
+    </ApiContainer.Provider>
   );
 }
